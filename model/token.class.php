@@ -10,7 +10,7 @@ class Token extends Base{
 			if(sizeof($campos)<=0):
 				$this->camposValores = array(
 				"tok_ses_id" => session_id(),
-				"tok_key" => NULL,
+				"tok_user" => NULL,
 				"token" => NULL,
 				"tok_time" => NULL
 				);

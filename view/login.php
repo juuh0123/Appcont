@@ -1,3 +1,18 @@
+<?php
+	if(isset($_GET['r'])){
+		switch ($_GET['r']) {
+			case '1':
+				$error = "Login e/ou Senha inválidos";
+				break;
+			case '2':
+				$error = "Sua sessão expirou. Efetue o login novamente";
+				break;
+			default:
+				$error = null;
+				break;
+		}
+	}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 	<head>
@@ -11,14 +26,14 @@
 		<link rel="stylesheet" type="text/css" href="../asset/css/login.css"/>
 	</head>
 <body>
-	<div class="head"><a href="" onclick="foo(this)"><div class="logo"></div></a></div>
+	<div class="head"><a href="login.php"><div class="logo"></div></a></div>
 	<div class="container">
 		<header>
 			<h1>App de Contingência | Produban</h1>
 			<h4>Efetue o login para continuar</h4><br />
 		</header>
 		<section>
-			<form name="form" method="post">
+			<form name="form" method="post" action="../controller/login.php">
 			  <div class="form-group">
 			    <label for="login">Usuário</label>
 			    <input type="text" class="form-control" name="user" id="user" placeholder="Enter your username" autocomplete="off" autofocus>
@@ -36,7 +51,7 @@
 			  </div>
 			  <button class="btn btn-default" type="submit" value="Submit" name="submit">Submit</button>
 			</form>
-			<div id=''></div>
+			<div id="error"><?php if(isset($error)) echo $error;?></div>
 		</section>
 	<footer>
 		<span class="foot">&copy; Produban Serviços Informática SA  2016. Todos os direitos reservados</span>

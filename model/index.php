@@ -5,6 +5,6 @@
 		if($sessao->getNvars() > 0){
 			header("Location: ../controller/dashboard.php");
 		}else{
-			header("Location: ../controller/core.php");
+			header("Location: ../view/login.php?r=1");
 		}
 ?>

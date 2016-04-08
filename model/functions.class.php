@@ -1,6 +1,7 @@
 <?php
 	inicializa();
 	//protegeArquivo(basename(__FILE__));
+	
 	function inicializa(){
 		if(file_exists(dirname(__FILE__).'/config.php')):
 			require_once(dirname(__FILE__).'/config.php');
@@ -40,14 +41,14 @@
 		if($modulo == null || $tela == null):
 			echo '<p>Erro na função <strong>'.__FUNCTION__.'<strong>: Faltam parêmetros para execução.</p>';
 		else:
-			if(file_exists(MODULOSPATH. "$modulo.php")):
-				include(MODULOSPATH. "$modulo.php");			
+			if(file_exists("../controller/$modulo.php")):
+				include("../controller/$modulo.php");			
 			else:
 				echo '<h1>404 Página não encontrada!</h1>';	
 			endif;	
 		endif;	
 	}//loadModulo
-	function protegeArquivo($nomeArquivo, $redirPara = 'index.php'){
+	function protegeArquivo($nomeArquivo, $redirPara = 'index'){
 		$url = $_SERVER["PHP_SELF"];
 		if(preg_match("/$nomeArquivo/i", $url)):
 			//redireciona para outra url
@@ -55,16 +56,17 @@
 		endif;	
 	}//protegeArquivo
 	function redireciona($url = ''){
-		header("Location: ".BASEURL.$url.'.php');
+		header("Location: ".BASEURL.$url);
 	}//redireciona
 	function codificaSenha($senha){
 		$senha = md5($senha);	
 		$senha = sha1($senha);	
 		return $senha;
 	}//codificaSenha
+	
 	function verificaLogin(){
-		$sessao = new sessao();
-		if($sessao->getNvars() <= 0 || $sessao->getVar('logado')!= TRUE || $sessao->getVar('ip') != $_SERVER['REMOTE_ADDR']):
+		$sessao = new Sessao();		
+		if($sessao->getNvars() <= 0 || $sessao->getVar('logado')!= TRUE ):
 			return true;
 		endif;	
 	}//vai verificar session, se pode ou não acessar certas páginas
@@ -140,7 +142,17 @@
 		//Saida: 896
 	}#trataString
 	
-	function refresh($pag){
-		header("Refresh: ");
+	function expSession(){
+		$sessao = new Sessao();
+		$now =  strtotime(date('H:i:s'));
+		$second =  $now - $sessao->getVar('timeSession');
+		if($second > $sessao->getVar('limiter')) {
+			$sessao->destroy();
+			return false;
+			#sessao utrapassou os 30 minutos
+		}
+		else{
+			return true;
+		}
 	}
 ?>

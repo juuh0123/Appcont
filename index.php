@@ -1,5 +1,5 @@
 <?php
 	include 'config.php';
-	header('Location: controller/core.php');	
+	header('Location: view/login.php');	
 ?>
 		

@@ -3,11 +3,9 @@
 require_once(dirname(__FILE__).'/autoload.php'); //não chamo o funcoes.php, chamo o autoload->funcoes
 protegeArquivo(basename(__FILE__));//tenho que chamar em todas minhas classes
 
-class sessao{
+class Sessao{
 	protected $id;
 	protected $nvars;
-	static $limiter = 60;
-	static $timeSession;
 	
 	public function __construct($inicia = true){
 		if($inicia == TRUE):
@@ -15,24 +13,22 @@ class sessao{
 		endif;		
 	}//construtor
 	
+	public function getId(){
+		return $this->id;
+	}
+	public function setId($id){
+		$this->id = $id;
+	}
+	
 	public function start(){
-		session_cache_limiter(30);
 		@session_start();
-		$this->id = session_id();
+		//session_regenerate_id();
+		//$this->id = session_id();
 		$this->setNvars();
-		$this->setTimePerSession(strtotime(date('H:i:s')));
 	}//metodo start
 	
-	public function setTimePerSession($timeSession){
-		self::$timeSession = $timeSession;
-	}
-	
-	public function getTimeSession(){
-		return self::$timeSession;
-	}
-	
 	private function setNvars(){
-		$this->nvars = sizeof($_SESSION);
+		$this->nvars = @sizeof($_SESSION);
 	}//metodo setNvars
 	
 	public function getNvars(){
@@ -58,6 +54,8 @@ class sessao{
 	}//metodo getVar
 	
 	public function destroy($inicia = false){
+		$_SESSION=array();
+    	unset($_SESSION);	
 		session_unset();
 		session_destroy();
 		$this->setNvars();
@@ -65,18 +63,6 @@ class sessao{
 			$this->start();
 		endif;		
 	}//metodo destroy
-	
-	static function expSession(){
-		$now =  strtotime(date('H:i:s'));
-		$second =  $now - self::$timeSession;
-		if($second > self::$limiter) {
-			return false;
-			#sessao utrapassou os 30 minutos
-		}
-		else{
-			return true;
-		}
-	}
 	
 	public function printAll(){
 		foreach($_SESSION as $k => $v):

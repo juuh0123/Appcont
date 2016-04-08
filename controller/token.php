@@ -6,37 +6,30 @@
 Class TokenController{
 		
 	private $encryption_key = 'xxxxxxxxxxxxxxxx';	
+	private $encrypt;
 		
-	 function setToken($resp, $user, $pass){
-		
-		$session = new sessao();
-		sessao::expSession();
-		exit;
-		
+	 function setToken($resp, $user, $pass, $session){
+	 	
 		$session->setVar('status', 'authorized');
 		$session->setVar('group', $resp->group);
 		$session->setVar('userid', $user);
 		
 		$iv = openssl_random_pseudo_bytes(16);
-		
-		$token = openssl_encrypt($pass, 'AES256', $this->encryption_key.session_id(), 0, $iv);
-		
-		$de = openssl_decrypt($encrypt, 'AES256', $this->encryption_key.session_id(), 0, $iv);
-		#echo session_id().$this->encryption_key.'<br>';
-		echo 'Encrypt: '.$encrypt.'<br>';
-		echo 'Decrypt: '.$de.'<br>';
-		echo $pass.'<br>';
-		echo strlen($encrypt).'<br>';
-		if($de === $pass){
-			$token = new Token(array(
-				"" => "",
-			));
-			echo 'Descriptografia efetuada com sucesso!';
-		}
-		else{
-			echo 'Não são iguais, algo não está certo!';
-		}
-		#$login->loadController('dashboard');
+		$encrypt = openssl_encrypt($pass, 'AES256', $this->encryption_key.session_id(), 0, $iv);
+		#$de = openssl_decrypt($encrypt, 'AES256', $this->encryption_key.session_id(), 0, $iv);
+		date_default_timezone_set ( "America/Sao_Paulo" );
+		$token = new Token(array(
+			"tok_ses_id" => $session->getId(),
+			"tok_user" => $user,
+			"token" => $encrypt,
+			"tok_time" => date('Y-m-d H:i:s', time())
+		));
+			$token->inserir($token);
+			
+	}//setToken
+	 
+	function getToken(){
+		return $this->encrypt;
 	}
 	
 	function tokenValidate(){

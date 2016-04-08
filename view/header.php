@@ -11,11 +11,4 @@
 		<link rel="stylesheet" type="text/css" href="../asset/css/login.css"/>
 	</head>
 <body>
-	<div class="head"><a href="login.php"><div class="logo"></div></a></div>
-	<footer>
-		<span class="foot">&copy; Produban Serviços Informática SA  2016. Todos os direitos reservados</span>
-		<p class="foot">Gerência de Serviços de Redes e Firewall</p>	
-	</footer>
-	</div>
-</body>
-</html>
+	<div class="head"><a href="dashboard.php?m=dashboard&t=home"><div class="logo"></div></a></div>
